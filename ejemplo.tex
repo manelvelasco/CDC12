@@ -1,12 +1,168 @@
 \section{Ejemplo motivador}
-El ejemplo motivador se centra en la descripciÃ³n de un sistema de una sola dimensiÃ³n. Al aplicar el retraso el sistema se puede modelar de las siguientes maneras:
+El ejemplo motivador se centra en la descripción de un sistema de una sola dimensión. Al aplicar el retraso el sistema se puede modelar de las siguientes maneras:
 \begin{itemize}
 \item Ampliando el espacio de estados con una nueva variable
 \item Dejanso el sistema sin ampliar y representarlo con dos sistemas independientes
 \end{itemize}
 
 
-El modelo que queremos controlar estÃ¡ descrito por las siguinetes ecuaciones continuas
-\begin{equation}
-\dot{x}=ax(t)+bu(t)
+%***************************************************************************************************************************
+%****************MODELO*****************************************************************************************************
+%***************************************************************************************************************************
+
+
+
+El modelo que queremos controlar está descrito por las siguinetes ecuaciones continuas
+\begin{equation}\label{eq:ejemplo_sistema_conmtinuo}
+\dot{x}(t)=ax(t)+bu(t)
 \end{equation}
+
+%***************************************************************************************************************************
+%*****************MODELO DISCRETO*******************************************************************************************
+%***************************************************************************************************************************
+
+
+
+El modelo discreto tiene un muestreo regular cada $h$ segundos y una actuación regular $h$ segundos, pero el muestreo y la actuación están desfasadaos uno respecto del otro por un tiempo de $\tau$ segundos
+
+Si discretizamos el sistema (\ref{eq:ejemplo_sistema_conmtinuo}) en los puntos en los que se toman las muestras y mantenemos contante la señal de control entre las actuaciones las ecuaciones que gobiernan la dinámica en los puntos de muestra son 
+
+\begin{equation}\label{eq:ejemplo_modelo_discreto}
+	x_{k+1}=e^{ah}+e^{a(h-\tau)}\int_0^{\tau}e^{as}dsbu_{k-1}+\int_0^{h-\tau}e^{as}dsbu_k
+\end{equation}
+
+
+%***************************************************************************************************************************
+%*****************MODELO AMPIADO********************************************************************************************
+%***************************************************************************************************************************
+
+
+Si escogemos ampliar el sistema el modelo se puede representar de una manera más compacta 
+
+\begin{equation}
+	\left[
+	\begin{matrix}
+		x_{k+1}\\
+		z_{k+1}
+	\end{matrix}
+	\right]=
+	\left[
+	\begin{matrix}
+		e^{ah} & e^{a(h-\tau)}\int_0^{\tau}e^{as}ds\\
+		0 & 0
+	\end{matrix}
+	\right]
+	\left[\begin{matrix}
+		x_{k}\\
+		z_{k}
+	\end{matrix}\right]
+	+\left[\begin{matrix}
+		\int_0^{h-\tau}e^{as}dsb\\
+		1
+	\end{matrix}\right]u_k
+\end{equation}
+
+%***************************************************************************************************************************
+%******************MODELO AMPLIADO CON VALORES NUMERICOS********************************************************************
+%***************************************************************************************************************************
+
+
+
+Para el caso que nos ocupa tomaremos $a=1$, $b=1$, $h=1$ y $\tau=0.5$ 
+que deja el sistema 
+\begin{equation}
+	\left[
+	\begin{matrix}
+		x_{k+1}\\
+		z_{k+1}
+	\end{matrix}
+	\right]=
+	\left[\begin{array}{cc} 2.718 & 1.07\\ 0 & 0 \end{array}\right]
+	\left[\begin{matrix}
+		x_{k}\\
+		z_{k}
+	\end{matrix}\right]
+	+\left[\begin{array}{c} 
+		0.6487\\ 
+		1.0 
+	\end{array}\right]
+	u_k
+\end{equation}
+
+%***************************************************************************************************************************
+%****************DISEÑO DEL CONTROLADOR*************************************************************************************
+%***************************************************************************************************************************
+
+Una vez obtenido el modelo es posible diseñar un controlador ($u_k=Lx_k$) que situe los polos del sistema en lazo cerrado en el lugar deseado. En nuestro caso, siendo un sistema discreto, escogemos los polos en $0.7104 \pm 1.2784i$. 
+
+
+%***************************************************************************************************************************
+%****************SISTEMA EN LAZO CERRADO************************************************************************************
+%***************************************************************************************************************************
+
+El controlador que situa los polos en el lugar deseado es $L=\left[\begin{array}{cc} - 2 &  0 \end{array}\right]$
+Y el sistema en lazo cerrado queda representado por
+\begin{equation}
+	\left[
+	\begin{matrix}
+		x_{k+1}\\
+		z_{k+1}
+	\end{matrix}
+	\right]=
+	\left[\begin{array}{cc} 1.421 & 1.07\\ -2.0 & 0 \end{array}\right]
+	\left[\begin{matrix}
+		x_{k}\\
+		z_{k}
+	\end{matrix}\right]
+\end{equation}
+
+%***************************************************************************************************************************
+%************REPRESENTACION ALTERNATIVA*************************************************************************************
+%***************************************************************************************************************************
+
+Una manera alternativa de representar el sistema consiste en no ampliar el sistestema pare representarlo, si sustituimos todos los valores en la ecuación (\ref{eq:ejemplo_modelo_discreto}) obtenemos
+
+\begin{equation}
+	x_{k+1}=2.718x_k+1.07u_{k-1}+0.6487u_k
+\end{equation}
+Y, teniendo en cuenta que $u_k=-2x_k$
+\begin{equation}
+	x_{k+1}=2.718x_k-2.139x_{k-1}-1.297x_k
+\end{equation}
+que simplificando
+\begin{equation}\label{eq:ejemplo_modelo_discreto_preparado}
+	x_{k+1}=1.421x_k-2.139x_{k-1}
+\end{equation}
+
+%***************************************************************************************************************************
+%*************MATRIZ EN LAZO CERRADO****************************************************************************************
+%***************************************************************************************************************************
+
+Llegados a este punto supongamos que existe un valor $P$ que es capaz de representar el sistema en lazo cerrado, de manera que $x_{k+1}=Px_k$. Si tomamos la dinámca a la inversa obtenemos que $x_{k}=P^{-1}x_{k+1}$ o lo que es lo mismo, $x_{k-1}=P^{-1}x_{k}$. Si sustituimos esta expresión en la ecuación (\ref{ejemplo_modelo_discreto_preparado})
+\begin{equation}
+	x_{k+1}=1.421x_k-2.139P^{-1}x_k
+\end{equation}
+y simplificamos
+\begin{equation}\label{eq:ejemplo_modelo_discreto_listo}
+	x_{k+1}=\left[1.421-2.139P^{-1}\right]x_k
+\end{equation}
+Obtemos la ecuación que representa la dinámica en lazo cerrado, que es precisamente la que hemos supuesto que existía. De lo anterior se deduce que
+\begin{equation}\label{eq:ejemplo_modelo_discreto_resultado}
+	P=1.421-2.139P^{-1}
+\end{equation}
+reordenando
+\begin{equation}\label{eq:ejemplo_modelo_discreto_resultado}
+	P^2=1.421P-2.139
+\end{equation}
+De donde es posible obtener que $P=0.7104 \pm 1.2784i$
+
+Es decir, el sistema puede representarse de dos maneras diferentes 
+\begin{equation}
+	x_{k+1}=(0.7104 + 1.2784i)x_k
+\end{equation}
+y
+\begin{equation}
+	x_{k+1}=(0.7104 - 1.2784i)x_k
+\end{equation}
+
+
