@@ -1,0 +1,447 @@
+\documentclass[a4paper,11pt]{article}
+%\usepackage{t1enc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+%\usepackage{theorem}
+\usepackage{graphics}
+\usepackage{graphicx}
+
+
+
+
+
+
+\title{Modelo discreto con retardos sin ampliar el estado}
+\author{Manel Velasco}
+\date{Original 3 de Marzo de 2006 \\revisado 27 de Julio de 2010}
+
+\begin{document}
+%forzamos la creación del título
+\maketitle
+%forzamos la creación del título
+\newpage
+
+
+\section{Modelo de un sistema discreto con retardos}
+Sean (\ref{e:sistema1}) y (\ref{e:sistema2}) las ecuaciones del
+modelo lineal invariante en el tiempo de la dinámica contínua de una
+planta controlada.
+%Sea (\ref{e:sistema1}) y (\ref{e:sistema2}) be the system
+%equations that describe the linear time invariant dynamics of the
+%controlled plant.
+\begin{equation}
+\label{e:sistema1}
+    \dot{x}=Ax(t)+Bu(t-\tau)\quad t\in \mathbb{R}^+
+\end{equation}
+\begin{equation}
+\label{e:sistema2}
+    y(t)=Cx(t)+Du(t)
+\end{equation}
+
+La ecuación (\ref{e:sistema1}) contempla el retardo temporal
+,$\tau$, que corresponde al retardo temporal que se produce en el
+cómputo de la ley adecuada de control en cada instante. Con el fin
+de cumplir las restricciones temporales de planificabilidad de las
+plataformas de tiempo real, se considera que $\tau$ es menor o igual
+que el periodo de muestreo, $h$, que se utilizará en el diseño del
+controlador discreto.
+
+%Equation (\ref{e:sys1}) includes a time delay, $\tau$, that will
+%correspond to the execution time of each controller job. To meet
+%real-time scheduling feasibility constraints, $\tau$ is assumed to
+%be less than or equal to the sampling period $h$ that will be used
+%in the design of the discrete time controller.
+
+En los instantes de muestreo, los sistemas representados por
+(\ref{e:sistema1}) y (\ref{e:sistema2}) se pueden describir con un
+modelo discreto (ecuaciones
+(\ref{e:sistema1_discreto})y(\ref{e:sistema2_discreto})) utilizando
+las transformaciones (\ref{e:cd1}), (\ref{e:cd2}) y (\ref{e:cd3})
+\cite{astrom:textbook97}.
+
+ %In the sampling instants, systems represented by (\ref{e:sys1})
+%and (\ref{e:sys2}) can be described by their discrete-time model
+%(equations (\ref{e:dsys1}) and (\ref{e:dsys2})) using
+%transformations (\ref{e:cd1}), (\ref{e:cd2}) and (\ref{e:cd3})
+%\cite{astrom:textbook97}.
+
+\begin{equation}
+\label{e:sistema1_discreto}
+    x(kh+h)=\Phi(h)x(kh)+\Gamma_0(h,\tau)u(kh)+\Gamma_1(h,\tau)u(kh-h)
+\end{equation}
+\begin{equation}
+\label{e:sistema2_discreto}
+    y(kh)=Cx(kh)+Du(kh)
+\end{equation}
+\begin{equation}
+\label{e:cd1}
+   \Phi(h)=e^{Ah}
+\end{equation}
+\begin{equation}
+\label{e:cd2}
+    \Gamma_0=\int_{0}^{h-\tau}e^{As}ds\; B
+\end{equation}
+\begin{equation}
+\label{e:cd3}
+    \Gamma_1=e^{A(h-\tau)}\int_{0}^{\tau}e^{As}ds\; B
+\end{equation}
+
+\indent Un modelo en espacio de estados de
+(\ref{e:sistema1_discreto})y(\ref{e:sistema2_discreto})) viene dado
+por (\ref{e:sistema_discreto_ampliado}), donde se ha añadido una
+variable de estado adicional,$z(kh)=u(kh-h)$, que representa el
+valor anterior de la ley de control \cite{astrom:textbook97}.
+
+%\indent A state space model of (\ref{e:dsys1}) and (\ref{e:dsys2})
+%is given by (\ref{e:dsys3}), where an extra state variable,
+%$z(kh)=u(kh-h)$, which represent the past values of the control
+%signal, is introduced \cite{astrom:textbook97}.
+
+\begin{eqnarray}\label{e:sistema_dicreto_ampliado}
+\left[\begin{array}{c} x(kh+h) \\ z(kh+h)
+\end{array} \right]=\left[\begin{array}{cc} \Phi(h) & \Gamma_1(h,\tau) \\
+   0 & 0
+\end{array}\right]
+\left[\begin{array}{c} x(kh) \\ z(kh)
+\end{array} \right]+\nonumber\\
+\left[\begin{array}{c} \Gamma_0(h,\tau) \\ I
+\end{array}\right]u(kh)
+\end{eqnarray}
+
+\indent  Con el fin
+de cumplir las especificaciones de diseño del sistema en lazo
+cerrado, el sistema descrito por (\ref{e:sistema_discreto_ampliado})
+se puede controlar usando la ley de control lineal por
+realimentación de estados
+(\ref{e:control_sistema_discreto_ampliado}), en la que
+$L(h_0,\tau_0)$ es la matriz de ganancias del sistema.
+
+%\indent For each control task in a real-time system, a nominal
+%(fixed) sampling period, $h_0$, is specified, which corresponds to
+%the task period, and is equal to the period used in the controller
+%design stage. Let us call $\tau_0$ the nominal (fixed) time delay
+%also used when designing the controller. To meet the closed-loop
+%system requirements, the system specified by (\ref{e:dsys3}) can
+%be controlled using state feedback (\ref{e:dsys4}), where
+%$L(h_0,\tau_0)$ is the gain matrix.
+
+\begin{eqnarray}\label{e:control_sistema_discreto_ampliado}
+u(kh)=-L(h_0,\tau_0) \left[\begin{array}{c} x(kh) \\ z(kh)
+\end{array} \right]
+\end{eqnarray}
+
+\indent Finalmente, el sistema en lazo cerrado invariante en el
+tiempo (dado por (\ref{e:sistema_dicreto_ampliado}) cuando se aplica
+la ley de control dada por
+(\ref{e:control_sistema_discreto_ampliado}) se caracteriza por la
+matriz en lazo cerrado
+(\ref{e:matriz_lazo_cerrado_sistema_discreto_ampliado}) que depende
+de $\Phi(h)$, $\Gamma_0(h,\tau)$ and $\Gamma_1(h,\tau)$ (matrices
+constantes en términos del periodo $h$ y el retardo $\tau$), y de la
+matriz de ganancias $L(h_0,\tau_0)$ expresada en términos de $h_0$
+and $\tau_0$.
+
+%\indent At the end, the closed-loop time invariant system (given
+%by equation (\ref{e:dsys3}) when the control signal is given by
+%(\ref{e:dsys4})) is characterized by a closed-loop matrix
+%(\ref{e:clm}) that depends on $\Phi(h)$, $\Gamma_0(h,\tau)$ and
+%$\Gamma_1(h,\tau)$ (constant matrices in terms of the period $h$
+%and time delay $\tau$), and on the constant matrix gain
+%$L(h_0,\tau_0)$ expressed in terms of fixed $h_0$ and $\tau_0$.
+
+\begin{eqnarray}\label{e:matriz_lazo_cerrado_sistema_discreto_ampliado}
+\Phi_{cl}(h,\tau)=\left[\begin{array}{cc} \Phi(h) & \Gamma_1(h,\tau) \\
+   0 & 0
+\end{array}\right]-\nonumber\\
+\left[\begin{array}{c} \Gamma_0(h,\tau) \\ I
+\end{array}\right]L(h_0,\tau_0)
+\end{eqnarray}
+
+\section{Alternativas al modelo clásico}
+Una alternativa a los modelos clásicos consiste en suponer que
+existe una matriz $\hat{\Phi}_{cl}(h,\tau)$ en lazo cerrado que
+representa la dinámica del estado del sistema incluso con los
+retardos de cómputo. Esta matriz en lazo cerrado difiere de
+(\ref{e:matriz_lazo_cerrado_sistema_discreto_ampliado}) en que el
+espacio de estados no se ha ampliado.
+
+El punto de partida será la dinámica discreta del sistema con
+retardos (ecuación (\ref{e:sistema1_discreto}))
+\begin{equation}
+    x(kh+h)=\Phi(h)x(kh)+\Gamma_0(h,\tau)u(kh)+\Gamma_1(h,\tau)u(kh-h)
+    \nonumber
+\end{equation}
+
+Para este sistema podemos proponer una realimentación lineal de
+estados
+\begin{eqnarray}
+u(kh)=L x(kh) \nonumber
+\end{eqnarray}
+Donde $L$ es un vector que debemos determinar. Sustituyendo la
+realimentación en la ecuación discreta de la dinámica del sistema
+obtenemos
+
+\begin{equation}\label{f:dinam}
+    x(kh+h)=\Phi x(kh)+\Gamma_0L x(kh)+\Gamma_1L x(kh-h)
+\end{equation}
+en la que hemos eliminado los parámetros $h$ y $\tau$ para mejorar
+la lectura.
+
+Legados a este punto, suponiendo que existe la matriz en lazo
+cerrado tenemos que
+\begin{equation}\label{f:suposicion}
+    x(kh)=\hat{\Phi}_{cl} x(kh-h)
+\end{equation}
+que implica (en caso de no tratarse de una matriz singular)
+\begin{equation}
+    x(kh-h)=\hat{\Phi}_{cl}^{-1} x(kh)
+\end{equation}
+De nuevo, sustituyendo en (\ref{f:dinam}) queda
+\begin{equation}\label{f:dinam_cl}
+    x(kh+h)=\Phi x(kh)+\Gamma_0L x(kh)+\Gamma_1L \hat{\Phi}_{cl}^{-1} x(kh)
+\end{equation}
+Donde es posible sacar factor común del estado para convertir la
+ecuación en un sistema en lazo cerrado
+\begin{equation}\label{f:dinam_cl_1}
+    x(kh+h)=(\Phi+\Gamma_0L+\Gamma_1L \hat{\Phi}_{cl}^{-1}) x(kh)
+\end{equation}
+
+Esta expresión es precisamente la ecuación (\ref{f:suposicion})
+descrita de forma explicita, lo que nos conduce a
+\begin{equation}\label{f:eq}
+    \hat{\Phi}_{cl}=\Phi+\Gamma_0L+\Gamma_1L \hat{\Phi}_{cl}^{-1}
+\end{equation}
+Que puede ser reorganizada para obtener una ecuación matricial de
+segundo grado
+\begin{equation}\label{f:eq_2grado}
+    \hat{\Phi}_{cl}^{2}-(\Phi+\Gamma_0L)\hat{\Phi}_{cl}-\Gamma_1L =0
+\end{equation}
+
+La ecuación  (\ref{f:eq_2grado}) es de tipo algebraico, lo que implica que no se puede resolver de forma clásica completando los cuadrados, sin embargo esta ecuación guarda grandes similitudes con el problema denominado Quadratic Eigen-value Problem (QEP) que ha sido analizado de forma extensiva en la literatura.  
+
+\textbf{Teorema:}\\
+Las soluciones de (\ref{f:eq_2grado}) estan dadas por
+\[
+\hat{\Phi}_{cl\, i}=
+\left[\begin{array}{cc}I & 0 \end{array}\right]
+MP^{k}
+\left[\begin{array}{cc}I \\ 0 \end{array}\right]
+\left[\begin{array}{cc}I & 0 \end{array}\right]
+(MP^{k})^{-1}
+\left[\begin{array}{cc} \Phi+\Gamma_0L  & \Gamma_1 \\
+   L & 0
+\end{array}\right]
+MP^{k}
+\left[\begin{array}{cc}I \\ 0 \end{array}\right]
+\left(
+\left[\begin{array}{cc}I & 0 \end{array}\right]
+MP^{k}
+\left[\begin{array}{cc}I \\ 0 \end{array}\right]
+\right)^{-1}
+\]
+
+Donde $M$ es la matriz que contiene los vectores propios de 
+\[
+\left[\begin{array}{cc} \Phi+\Gamma_0L  & \Gamma_1 \\
+   L & 0
+\end{array}\right]
+\]
+$P$ es la matriz de permutación de columnas
+\[
+\left[\begin{array}{ccc} 
+0 & 0 & 1\\1 & 0 & 0\\0 & 1 & 0
+\end{array}\right]
+\]
+y $k=\{1 \dots n+1\}$ es el índice de la solucón que queremos obtener
+\section{Dos soluciones para un sistema}
+Las solución para la ecuación (\ref{f:eq_2grado_sol}) pueden tomar
+diferentes valores, que en general no están relacionados con la solución clásica de una ecuación de segundo orden. Si consideramos un sistema de segundo orden la ecuación (\ref{f:eq_2grado_sol}) puede ser descrita por un sistema de cuatro ecuaciónes escalares no lineales que pueden arrojar multiples resultados. En general para un sistema de orden $2$ podemos encontrar cuatro soluciones, aunque algunas de ellas son dobles. 
+
+\subsection{Un ejemplo ilustrativo}
+La ecuación de la dinámica de un integrador doble está descrita por
+\begin{eqnarray}
+\left[\begin{array}{c} \dot{x}_1 \\
+\dot{x}_2
+\end{array}\right]=\left[\begin{array}{cc} 0 & 1 \\
+   0 & 0
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]+ \left[\begin{array}{c} 0 \\
+1
+\end{array}\right]u
+\end{eqnarray}
+
+Si se realiza un control discreto del sistema con periodo $h$ y con
+un retraso en la aplicación del control de $\tau$ el sistema queda
+representado por
+
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]u_k+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]u_{k-1}
+\end{eqnarray}
+
+Si suponemos que $u_k=\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k$ entonces obtenemos
+
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\right)\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k-1}
+\end{eqnarray}
+
+Y suponiendo que existe $\hat{\Phi}_{cl}$ el sistema queda
+representado por
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\hat{\Phi}_{cl}^{-1}\right)\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k}
+\end{eqnarray}
+Que da como ecuación a resolver
+\begin{eqnarray}
+\hat{\Phi}_{cl}^2-\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\right)\hat{\Phi}_{cl}-\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]=0
+\end{eqnarray}
+
+Si diseñamos un controlador para el sistema sin
+retardos, y tomando $h=1$ vemos que $l_1=-1$ y $l_2=-\frac{3}{2}$
+quedando el sistema representado por
+\[
+\hat{\Phi}_{cl}=\left[ \begin{array}{cc}  1.5 & 1.75
+\\\noalign{\medskip} 1& 2.5\end{array} \right]
+\]
+lo que situa el sistema con los polos en $\lambda_{1,2}=0$.
+
+Introduciendo un retardo de $0.1s$ al sistema, las soluciones son
+\[
+\hat{\Phi}_{cl1}=  \left[ \begin {array}{cc}  
+-0.5892&  
+-0.8838\\\noalign{\medskip}
+0.6211&
+0.9314\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl2}=  \left[ \begin {array}{cc}  
+0.2671+0.0089i&  
+0.4005+0.0134i\\\noalign{\medskip}
+-0.2104+0.4268i&
+-0.3157+0.6401i\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl3}=  \left[ \begin {array}{cc}  
+0.2671-0.0089i&  
+0.4005-0.0134i\\\noalign{\medskip}
+-0.2104-0.4268i&
+-0.3157-0.6401i\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl4}=  \left[ \begin {array}{cc}  
+0.2448&  
+0.4013\\\noalign{\medskip}
+-1.269&
+-0.342\end {array} \right]
+\] 
+
+\[
+\hat{\Phi}_{cl5}=  \left[ \begin {array}{cc}  
+ 0.7000-0.3247i&  
+0.3393-0.3075i\\\noalign{\medskip}
+ -0.7895-0.3418i&
+ -0.4063-0.3246i\end {array} \right]
+\] 
+ 
+\[
+\hat{\Phi}_{cl6}=  \left[ \begin {array}{cc}  
+ 0.7000+0.3247i&  
+0.3393+0.3075i\\\noalign{\medskip}
+ -0.7895+0.3418i&
+ -0.4063+0.3246i\end {array} \right]
+\] 
+
+Mientras que la matriz ampliada está representada por 
+\[
+\hat{\Phi}_{cl6}=  \left[ \begin {array}{ccc}  
+ 1.4050   & 1.6075 &   0.0950\\\noalign{\medskip}
+    0.9000 &   2.3500&    0.1000\\\noalign{\medskip}
+    1.0000  &  1.5000 &        0
+\end {array} \right]
+\] 
+
+
+
+\section{Del modelo clásico al simplificado}
+Tomemos la ecuación
+(\ref{e:matriz_lazo_cerrado_sistema_discreto_ampliado}) y supongamos
+que la realimentación se realiza de tal forma que no tenemos en
+cuenta los valores anteriores de la señal de control.
+\begin{eqnarray}\label{e:matriz_lazo_cerrado_sistema_discreto_ampliado}
+L=\left[K\, 0 \right]
+\end{eqnarray}
+Entonces el sistema en lazo cerrado queda descrito por
+\begin{eqnarray}
+\Phi_{cl}(h,\tau)=\left[\begin{array}{cc} \Phi & \Gamma_1 \\
+   0 & 0
+\end{array}\right]+ \left[\begin{array}{cc} \Gamma_0K & 0 \\
+   K & 0
+\end{array}\right]=\left[\begin{array}{cc} \Phi+\Gamma_0K & \Gamma_1 \\
+   K & 0
+\end{array}\right]
+\end{eqnarray}
+Y el polinomio (Matricial) característico de esta matriz por bloques
+será (atención esto no está verificado, es una matriz por
+bloques!!!)
+\begin{eqnarray}
+det\left(\left[\begin{array}{cc}Q-(\Phi+\Gamma_0K) & -\Gamma_1 \\
+   -K & Q
+\end{array}\right]\right)= Q^{2}-(\Phi+\Gamma_0K)Q-\Gamma_1K =0
+\end{eqnarray}
+Los paralelismos con la ecuación \ref{f:eq_2grado} son evidentes,
+aunque habría que centrarse un poco más en la interpretación
+\end{document}
