@@ -5,16 +5,11 @@
 \usepackage{amscd}
 \usepackage{amssymb}
 \usepackage{amstext}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 %\usepackage{theorem}
 \usepackage{graphics}
 \usepackage{graphicx}
-
-
-
-
-
 
 \title{Modelo discreto con retardos sin ampliar el estado}
 \author{Manel Velasco}
@@ -26,10 +21,7 @@
 %forzamos la creación del título
 \newpage
 
-\section{Ejemplo motivador}
-
-este es el ejemplo djhgdjlahgsdlJASLDJHASlfjhASLDJHF
-
+\input{ejemplo.tex}
 \section{Modelo de un sistema discreto con retardos}
 Sean (\ref{e:sistema1}) y (\ref{e:sistema2}) las ecuaciones del
 modelo lineal invariante en el tiempo de la dinámica contínua de una
