@@ -1,9 +1,28 @@
 \section{Ejemplo motivador}
+
+
 El ejemplo motivador se centra en la descripción de un sistema de una sola dimensión. Al aplicar el retraso el sistema se puede modelar de las siguientes maneras:
 \begin{itemize}
 \item Ampliando el espacio de estados con una nueva variable
-\item Dejanso el sistema sin ampliar y representarlo con dos sistemas independientes
+\item Dejando el sistema sin ampliar y representarlo con dos sistemas independientes
 \end{itemize}
+
+
+\marginpar{\small{Pau, hi ha dos exemples, escull el que més t'agradi}}
+
+
+
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%*************EJEMPO UNO****************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+\subsection{EJEMPLO DIMENSIÓN 1}
+
 
 
 %***************************************************************************************************************************
@@ -102,7 +121,7 @@ Una vez obtenido el modelo es posible diseñar un controlador ($u_k=Lx_k$) que si
 
 El controlador que situa los polos en el lugar deseado es $L=\left[\begin{array}{cc} - 2 &  0 \end{array}\right]$
 Y el sistema en lazo cerrado queda representado por
-\begin{equation}
+\begin{equation}\label{eq:ejemplo_estado_ampliado_lazo_cerrado}
 	\left[
 	\begin{matrix}
 		x_{k+1}\\
@@ -147,7 +166,7 @@ y simplificamos
 	x_{k+1}=\left[1.421-2.139P^{-1}\right]x_k
 \end{equation}
 Obtemos la ecuación que representa la dinámica en lazo cerrado, que es precisamente la que hemos supuesto que existía. De lo anterior se deduce que
-\begin{equation}\label{eq:ejemplo_modelo_discreto_resultado}
+\begin{equation}
 	P=1.421-2.139P^{-1}
 \end{equation}
 reordenando
@@ -165,4 +184,176 @@ y
 	x_{k+1}=(0.7104 - 1.2784i)x_k
 \end{equation}
 
+Ambas son solución de la ecuacion (\ref{eq:ejemplo_modelo_discreto_resultado}), y cualquiera de las dos sirve para representar la dinámica del sistema.
+
+El modelo (\ref{eq:ejemplo_estado_ampliado_lazo_cerrado}) tiene dos valores propios, y los modelos que hemos deducido tienen cada uno de ellos un valor propio del sistema ampliado. Utilizando uno de ellos es posible recontruir de forma completa el estado del sistema ampliado
+
+
+
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%*************EJEMPO DOS****************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+%***************************************************************************************************************************
+
+
+
+
+
+\subsection{EJEMPO DIMENSIÓN 2}
+\marginpar{\small{Encara estic retocant aquest exemple}}
+La ecuación de la dinámica de un integrador doble está descrita por
+\begin{eqnarray}
+\left[\begin{array}{c} \dot{x}_1 \\
+\dot{x}_2
+\end{array}\right]=\left[\begin{array}{cc} 0 & 1 \\
+   0 & 0
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]+ \left[\begin{array}{c} 0 \\
+1
+\end{array}\right]u
+\end{eqnarray}
+
+Si se realiza un control discreto del sistema con periodo $h$ y con
+un retraso en la aplicación del control de $\tau$ el sistema queda
+representado por
+
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]u_k+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]u_{k-1}
+\end{eqnarray}
+
+Si suponemos que $u_k=\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k$ entonces obtenemos
+
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\right)\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_k+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k-1}
+\end{eqnarray}
+
+Y suponiendo que existe $\hat{\Phi}_{cl}$ el sistema queda
+representado por
+\begin{eqnarray}
+\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k+1}=\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]+\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\hat{\Phi}_{cl}^{-1}\right)\left[\begin{array}{c} x_1 \\
+x_2
+\end{array}\right]_{k}
+\end{eqnarray}
+Que da como ecuación a resolver
+\begin{eqnarray}
+\hat{\Phi}_{cl}^2-\left(\left[\begin{array}{cc} 1 & h \\
+   0 & 1
+\end{array}\right]+ \left[\begin{array}{c} \frac{(h-\tau)^2}{2} \\
+h-\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]\right)\hat{\Phi}_{cl}-\left[\begin{array}{c} \tau h- \frac{\tau^2}{2} \\
+\tau
+\end{array}\right]\left[\begin{array}{cc} l_1 & l_2
+\end{array}\right]=0
+\end{eqnarray}
+
+Si diseñamos un controlador para el sistema sin
+retardos, y tomando $h=1$ vemos que $l_1=-1$ y $l_2=-\frac{3}{2}$
+quedando el sistema representado por
+\[
+\hat{\Phi}_{cl}=\left[ \begin{array}{cc}  1.5 & 1.75
+\\\noalign{\medskip} 1& 2.5\end{array} \right]
+\]
+lo que situa el sistema con los polos en $\lambda_{1,2}=0$.
+
+Introduciendo un retardo de $0.1s$ al sistema, las soluciones son
+\[
+\hat{\Phi}_{cl1}=  \left[ \begin {array}{cc}  
+-0.5892&  
+-0.8838\\\noalign{\medskip}
+0.6211&
+0.9314\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl2}=  \left[ \begin {array}{cc}  
+0.2671+0.0089i&  
+0.4005+0.0134i\\\noalign{\medskip}
+-0.2104+0.4268i&
+-0.3157+0.6401i\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl3}=  \left[ \begin {array}{cc}  
+0.2671-0.0089i&  
+0.4005-0.0134i\\\noalign{\medskip}
+-0.2104-0.4268i&
+-0.3157-0.6401i\end {array} \right]
+\]
+
+\[
+\hat{\Phi}_{cl4}=  \left[ \begin {array}{cc}  
+0.2448&  
+0.4013\\\noalign{\medskip}
+-1.269&
+-0.342\end {array} \right]
+\] 
+
+\[
+\hat{\Phi}_{cl5}=  \left[ \begin {array}{cc}  
+ 0.7000-0.3247i&  
+0.3393-0.3075i\\\noalign{\medskip}
+ -0.7895-0.3418i&
+ -0.4063-0.3246i\end {array} \right]
+\] 
+ 
+\[
+\hat{\Phi}_{cl6}=  \left[ \begin {array}{cc}  
+ 0.7000+0.3247i&  
+0.3393+0.3075i\\\noalign{\medskip}
+ -0.7895+0.3418i&
+ -0.4063+0.3246i\end {array} \right]
+\] 
+
+Mientras que la matriz ampliada está representada por 
+\[
+\hat{\Phi}_{cl6}=  \left[ \begin {array}{ccc}  
+ 1.4050   & 1.6075 &   0.0950\\\noalign{\medskip}
+    0.9000 &   2.3500&    0.1000\\\noalign{\medskip}
+    1.0000  &  1.5000 &        0
+\end {array} \right]
+\] 
 

@@ -1,0 +1,20 @@
+\section{Ejemplo motivador}
+El ejemplo motivador se centra en la descripción de un sistema de una sola dimensión. Al aplicar el retraso el sistema se puede modelar de las siguientes maneras:
+\begin{itemize}
+\item Ampliando el espacio de estados con una nueva variable
+\item Dejanso el sistema sin ampliar y representarlo con dos sistemas independientes
+\end{itemize}
+
+
+El modelo que queremos controlar está descrito por las siguinetes ecuaciones continuas
+\begin{equation}\label{eq:ejemplo_sistema_conmtinuo}
+\dot{x}(t)=ax(t)+bu(t)
+\end{equation}
+
+El modelo discreto tiene un muestreo regular cada $h$ segundos y una actuación regular $h$ segundos, pero el muestreo y la actuación están desfasadaos uno respecto del otro por un tiempo de $\tau$ segundos
+
+Si discretizamos el sistema (\ref{eq:ejemplo_sistema_conmtinuo}) en los puntos en los que se toman las muestras y mantenemos contante la señal de control entre las actuaciones las ecuaciones que gobiernan la dinámica en los puntos de muestra son
+
+\begin{equation}
+	x_{k+1}=e^{ah}+e^{a(h-\tau)}\int_0^{\tau}e^{as}dsbu_{k-1}+\int_0^{h-\tau}e^{as}dsbu_k
+\end{equation}

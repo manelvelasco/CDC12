@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2011.10.14)  5 MAR 2012 16:43
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=latex 2011.10.14)  6 MAR 2012 13:28
 entering extended mode
  Source specials enabled.
  %&-line parsing enabled.
@@ -157,9 +157,6 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \Gin@req@width=\dimen117
 ) (./CDC12.aux
 
-LaTeX Warning: Label `eq:ejemplo_modelo_discreto_resultado' multiply defined.
-
-
 LaTeX Warning: Label `e:matriz_lazo_cerrado_sistema_discreto_ampliado' multiply
  defined.
 
@@ -189,62 +186,76 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 ) [1
 
 ] (./ejemplo.tex
+Underfull \hbox (badness 5475) in paragraph at lines 11--11
+\OT1/cmr/m/n/10 dos exem-
+ []
+
 [2]
 
 LaTeX Warning: Reference `ejemplo_modelo_discreto_preparado' on page 3 undefine
-d on input line 141.
+d on input line 160.
 
-)
 
-LaTeX Warning: Citation `astrom:textbook97' on page 3 undefined on input line 6
-0.
+Underfull \hbox (badness 10000) in paragraph at lines 208--208
+[][]\OT1/cmr/m/n/10 Encara
+ []
+
+
+Underfull \hbox (badness 6157) in paragraph at lines 208--208
+\OT1/cmr/m/n/10 es-tic re-to-
+ []
 
 [3]
+Overfull \hbox (105.20244pt too wide) in alignment at lines 245--261
+ [][][] []
+ []
 
-LaTeX Warning: Reference `e:sistema_discreto_ampliado' on page 4 undefined on i
+
+Overfull \hbox (75.90517pt too wide) in alignment at lines 265--279
+ [][][] []
+ []
+
+
+Overfull \hbox (16.84004pt too wide) in alignment at lines 281--291
+ [][][] []
+ []
+
+[4])
+
+LaTeX Warning: Citation `astrom:textbook97' on page 5 undefined on input line 6
+0.
+
+
+LaTeX Warning: Reference `e:sistema_discreto_ampliado' on page 5 undefined on i
 nput line 91.
 
 
-LaTeX Warning: Citation `astrom:textbook97' on page 4 undefined on input line 9
+LaTeX Warning: Citation `astrom:textbook97' on page 5 undefined on input line 9
 3.
 
+[5]
 
-LaTeX Warning: Reference `e:sistema_discreto_ampliado' on page 4 undefined on i
+LaTeX Warning: Reference `e:sistema_discreto_ampliado' on page 6 undefined on i
 nput line 113.
 
-[4]
+[6]
 Overfull \hbox (127.27013pt too wide) detected at line 241
 [] \OT1/cmr/m/n/10.95 = [] \OML/cmm/m/it/10.95 MP[] [] [] \OT1/cmr/m/n/10.95 (\
 OML/cmm/m/it/10.95 MP[]\OT1/cmr/m/n/10.95 )[] [] \OML/cmm/m/it/10.95 MP[] [] []
 []
  []
 
-[5]
-
-LaTeX Warning: Reference `f:eq_2grado_sol' on page 6 undefined on input line 25
-7.
-
-
-LaTeX Warning: Reference `f:eq_2grado_sol' on page 6 undefined on input line 25
-8.
-
-
-Overfull \hbox (105.20244pt too wide) in alignment at lines 297--313
- [][][] []
- []
-
-[6]
-Overfull \hbox (75.90517pt too wide) in alignment at lines 317--331
- [][][] []
- []
-
-
-Overfull \hbox (16.84004pt too wide) in alignment at lines 333--343
- [][][] []
- []
-
 [7]
-Overfull \hbox (6.03343pt too wide) in paragraph at lines 431--435
+
+LaTeX Warning: Reference `f:eq_2grado_sol' on page 8 undefined on input line 26
+3.
+
+
+LaTeX Warning: Reference `f:eq_2grado_sol' on page 8 undefined on input line 26
+4.
+
+
+Overfull \hbox (6.03343pt too wide) in paragraph at lines 286--290
 []\OT1/cmr/m/n/10.95 Y el po-li-no-mio (Ma-tri-cial) ca-rac-ter^^S^^Psti-co de 
 es-ta ma-triz por blo-ques ser^^Sa (aten-
  []
@@ -258,12 +269,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2141 strings out of 493849
- 25168 string characters out of 1152845
- 89943 words of memory out of 3000000
- 5415 multiletter control sequences out of 15000+50000
+ 2143 strings out of 493849
+ 25217 string characters out of 1152845
+ 91943 words of memory out of 3000000
+ 5417 multiletter control sequences out of 15000+50000
  11352 words of font info for 43 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
  27i,13n,27p,456b,206s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on CDC12.dvi (8 pages, 25368 bytes).
+Output written on CDC12.dvi (8 pages, 26440 bytes).
